@@ -4,10 +4,10 @@ export async function cardActive(id: number) {
 
     const validCard = await cardRepository.findById(id);
 
-    if (validCard.isBlocked) {
+    if (!validCard.password) {
         throw {
             type: "unauthorized",
-            message: "card is blocked!"
+            message: "card wasn't activated yet!"
         }
     }
 

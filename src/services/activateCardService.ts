@@ -1,10 +1,10 @@
 import * as cardRepository from "../repositories/cardRepository.js";
 import { validateIdCard } from "../utils/validateIdCardUtils.js";
 import { encryptInformation } from "../utils/encryptInfoUtils.js";
-import { decryptInformationCard } from "../utils/decryptInformationCardUtils.js";
 
 import dotenv from "dotenv";
 import { expirationCard } from "../utils/validateExpirationCardUtils.js";
+import { activateCardSchema } from "../schemas/card.js";
 
 
 dotenv.config();
@@ -23,21 +23,21 @@ async function validateInfosCardActivate(id: number, cvc: string, password: stri
 
     const validateId = await validateIdCard(id);
 
-    const decryptedSecurityCode = await decryptInformationCard(validateId.card.securityCode);
-
     await expirationCard(validateId.card.expirationDate);
-
-    if (decryptedSecurityCode.decryptInformationCard !== cvc) {
-        throw {
-            type: "unauthorized",
-            message: "incorrect security code!"
-        }
-    }
 
     if (validateId.card.password) {
         throw {
             type: "conflict",
             message: "the user already has a registered password!"
+        }
+    }
+
+    const { error } = activateCardSchema.validate({ password }, { abortEarly: false });
+
+    if (error) {
+        throw {
+            type: "unprocessable entity",
+            message: "the password don't have four numbers!"
         }
     }
 

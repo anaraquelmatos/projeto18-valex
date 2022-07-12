@@ -12,9 +12,16 @@ export async function cardPurchasesUser(id: number, password: string, businessId
 
     const validCard = await validateIdCard(id);
 
+    await cardActive(id);
+
     await expirationCard(validCard.card.expirationDate);
 
-    await cardActive(id);
+    if (validCard.card.isBlocked) {
+        throw {
+            type: "unauthorized",
+            message: "card is blocked!"
+        }
+    }
 
     const decryptPassword = await decryptInformationCard(validCard.card.password);
 

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { activateCardSchema } from "../schemas/card.js";
 import * as activateCardService from "../services/activateCardService.js";
 import { TransactionTypes } from "../repositories/cardRepository.js";
 import { createCardSchema } from "../schemas/card.js";
@@ -31,12 +30,6 @@ export async function createCard(req: Request, res: Response) {
 export async function activateCard(req: Request, res: Response) {
 
     const { id, cvc, password }: { id: number, cvc: string, password: string } = req.body;
-
-    const { error } = activateCardSchema.validate({ password }, { abortEarly: false });
-
-    if (error) {
-        return res.status(422).send(error.details.map(detail => detail.message));
-    }
 
     await activateCardService.infosCardActivated(id, cvc, password);
 
