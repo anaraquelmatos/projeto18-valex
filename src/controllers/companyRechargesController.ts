@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { rechargeCardSchema } from "../schemas/card.js";
+import { amountCardSchema } from "../schemas/card.js";
 import { rechargeUserCard } from "../services/rechargeCardService.js";
 
 export async function rechargeCard(req: Request, res: Response) {
@@ -10,7 +10,7 @@ export async function rechargeCard(req: Request, res: Response) {
 
     const key = authorization?.replace("Bearer", "").trim();
 
-    const { error } = rechargeCardSchema.validate({ amount }, { abortEarly: false });
+    const { error } = amountCardSchema.validate({ amount }, { abortEarly: false });
 
     if (error) {
         return res.status(422).send(error.details.map(detail => detail.message));
@@ -18,6 +18,6 @@ export async function rechargeCard(req: Request, res: Response) {
 
     await rechargeUserCard(id, key, amount);
 
-    res.sendStatus(200);
+    res.sendStatus(201);
 
 }

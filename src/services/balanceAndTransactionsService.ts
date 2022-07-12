@@ -1,37 +1,15 @@
+import { amountAvailableCard } from "../utils/amountAvailable.js";
 import { validateIdCard } from "../utils/validateIdCardUtils.js";
-import * as rechargeRepository from "../repositories/rechargeRepository.js";
-import * as paymentRepository from "../repositories/paymentRepository.js";
 
 export async function balanceAndTransactionsCard(id: number) {
 
     await validateIdCard(id);
 
-    const transactions = await paymentRepository.findByCardId(id);
-
-    const sumTransactions = await countValues(transactions);
-
-    const recharges = await rechargeRepository.findByCardId(id);
-
-    const sumRecharges = await countValues(recharges);
-
-    const finalBalance = sumRecharges.total - sumTransactions.total;
+    const card = await amountAvailableCard(id);
 
     return {
-        balance: finalBalance,
-        transactions: transactions,
-        recharges: recharges
+        balance: card.finalBalance,
+        transactions: card.transactions,
+        recharges: card.recharges
     }
-}
-
-async function countValues(values: any[]) {
-
-    let total: number = null;
-
-    values.map(value => {
-        total += value.amount;
-    });
-
-    return {
-        total
-    };
 }

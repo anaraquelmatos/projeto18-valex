@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { rechargeCard } from "../controllers/companyRechargesController";
+import { rechargeCard } from "../controllers/companyRechargesController.js";
 
 const rechargeRouter = Router();
 
