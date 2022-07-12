@@ -12,7 +12,7 @@ export async function createCard(req: Request, res: Response) {
 
     const { authorization } = req.headers;
 
-    const { id, type }: { id: number, type: TransactionTypes } = req.body;
+    const { employeeId, type }: {employeeId: number, type: TransactionTypes } = req.body;
 
     const key = authorization?.replace("Bearer", "").trim();
 
@@ -22,16 +22,16 @@ export async function createCard(req: Request, res: Response) {
         return res.status(422).send(error.details.map(detail => detail.message));
     }
 
-    await createCardService.infosCardCreated(id, type, key);
+    await createCardService.infosCardCreated(employeeId, type, key);
 
     res.sendStatus(201);
 }
 
 export async function activateCard(req: Request, res: Response) {
 
-    const { id, cvc, password }: { id: number, cvc: string, password: string } = req.body;
+    const { id, securityCode, password }: { id: number, securityCode: string, password: string } = req.body;
 
-    await activateCardService.infosCardActivated(id, cvc, password);
+    await activateCardService.infosCardActivated(id, securityCode, password);
 
     res.sendStatus(201);
 }

@@ -5,13 +5,14 @@ import { encryptInformation } from "../utils/encryptInfoUtils.js";
 import dotenv from "dotenv";
 import { expirationCard } from "../utils/validateExpirationCardUtils.js";
 import { activateCardSchema } from "../schemas/card.js";
+import { decryptInformationCard } from "../utils/decryptInformationCardUtils.js";
 
 
 dotenv.config();
 
-export async function infosCardActivated(id: number, cvc: string, password: string) {
+export async function infosCardActivated(id: number, securityCode: string, password: string) {
 
-    await validateInfosCardActivate(id, cvc, password);
+    await validateInfosCardActivate(id, securityCode, password);
 
     const passwordEncrypted = await encryptInformation(password);
 
@@ -19,7 +20,7 @@ export async function infosCardActivated(id: number, cvc: string, password: stri
 
 }
 
-async function validateInfosCardActivate(id: number, cvc: string, password: string) {
+async function validateInfosCardActivate(id: number, securityCode: string, password: string) {
 
     const validateId = await validateIdCard(id);
 
@@ -29,6 +30,16 @@ async function validateInfosCardActivate(id: number, cvc: string, password: stri
         throw {
             type: "conflict",
             message: "the user already has a registered password!"
+        }
+    }
+
+    const decryptedCode = await decryptInformationCard(validateId.card.securityCode);
+
+    if(decryptedCode.decryptInformationCard !== securityCode){
+
+        throw {
+            type: "unauthorized",
+            message: "the security code is  incorrect!"
         }
     }
 

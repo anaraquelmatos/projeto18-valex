@@ -4,8 +4,8 @@ import { cardPurchasesUser } from "../services/purchaseService.js";
 
 export async function cardPurchase(req: Request, res: Response) {
 
-    const { id, password, businessId, amount }: {
-        id: number, password: string, businessId: number,
+    const { cardId, password, businessId, amount }: {
+        cardId: number, password: string, businessId: number,
         amount: number
     } = req.body;
 
@@ -15,7 +15,7 @@ export async function cardPurchase(req: Request, res: Response) {
         return res.status(422).send(error.details.map(detail => detail.message));
     }
 
-    await cardPurchasesUser(id, password, businessId, amount);
+    await cardPurchasesUser(cardId, password, businessId, amount);
 
     res.sendStatus(201);
 }
