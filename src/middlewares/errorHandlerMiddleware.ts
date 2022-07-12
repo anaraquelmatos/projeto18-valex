@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 export default function errorHandler(error, req: Request, res: Response, next: NextFunction) {
 
-    if (error.type === "doesn't exist") {
+    if (error.type === "unauthorized") {
         return res.status(401).send({ message: error.message });
     }
     if (error.type === "conflict") {

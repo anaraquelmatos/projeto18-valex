@@ -29,7 +29,7 @@ async function validateInfosCardActivate(id: number, cvc: string, password: stri
 
     if (decryptedSecurityCode.decryptInformationCard !== cvc) {
         throw {
-            type: "doesn't exist",
+            type: "unauthorized",
             message: "incorrect security code!"
         }
     }

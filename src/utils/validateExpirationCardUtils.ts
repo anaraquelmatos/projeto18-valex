@@ -6,7 +6,7 @@ export async function expirationCard(expirationDate: String) {
 
     if (expirationDate < DATE_TODAY){
         throw {
-            type: "doesn't exist",
+            type: "unauthorized",
             message: "expired expiration date!"
         }
     }

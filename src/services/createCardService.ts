@@ -11,13 +11,9 @@ dotenv.config();
 
 const EXPIRATION_TIME = 5;
 
-export async function encryptInfo(securityCode: string) {
-   
-}
-
 export async function infosCardCreated(id: number, type: cardRepository.TransactionTypes, key: string) {
 
-    const fullName = await validateCardRepos(id, type, key);
+    const card = await validateCardRepos(id, type, key);
 
     const numberCard = faker.finance.creditCardNumber('####-####-####-####');
 
@@ -27,7 +23,7 @@ export async function infosCardCreated(id: number, type: cardRepository.Transact
 
     const expirationDate = dayjs().add(EXPIRATION_TIME, 'year').format('MM/YY');
 
-    await insertCardRepos(id, type, fullName.name, numberCard, securityCodeEncrypted.infoCardEncrypted, expirationDate)
+    await insertCardRepos(id, type, card.name, numberCard, securityCodeEncrypted.infoCardEncrypted, expirationDate)
 
 }
 
@@ -39,14 +35,14 @@ async function validateCardRepos(id: number, type: cardRepository.TransactionTyp
 
     if (!validateKey) {
         throw {
-            type: "doesn't exist company",
+            type: "unauthorized",
             message: "apiKey doesn't exist!"
         }
     }
 
     if (!validateId) {
         throw {
-            type: "doesn't exist",
+            type: "unauthorized",
             message: "user id doesn't exist!"
         }
     }

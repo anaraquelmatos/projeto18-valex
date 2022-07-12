@@ -5,7 +5,7 @@ import { TransactionTypes } from "../repositories/cardRepository.js";
 import { createCardSchema } from "../schemas/card.js";
 import * as createCardService from "../services/createCardService.js";
 import { balanceAndTransactionsCard } from "../services/balanceAndTransactionsService.js";
-import {blockCardInformations} from "../services/blockCardService.js";
+import { blockCardInformations } from "../services/blockCardService.js";
 import { unblockCardInformations } from "../services/unblockCardService.js";
 
 
@@ -15,9 +15,9 @@ export async function createCard(req: Request, res: Response) {
 
     const { id, type }: { id: number, type: TransactionTypes } = req.body;
 
-    const key = authorization?.replace("Bearer", "").trim().replace("-api-key", "");
+    const key = authorization?.replace("Bearer", "").trim();
 
-    const { error } = createCardSchema.validate({ type, key }, { abortEarly: false });
+    const { error } = createCardSchema.validate({ type }, { abortEarly: false });
 
     if (error) {
         return res.status(422).send(error.details.map(detail => detail.message));
@@ -72,3 +72,5 @@ export async function unblockCard(req: Request, res: Response) {
     res.sendStatus(200);
 
 }
+
+

@@ -11,9 +11,9 @@ export async function unblockCardInformations(id: number, password: string) {
 
     await expirationCard(cardInfo.card.expirationDate);
 
-    if (cardInfo.card.isBlocked === false) {
+    if (!cardInfo.card.isBlocked) {
         throw {
-            type: "doesn't exist",
+            type: "conflict",
             message: "card is already unblocked!"
         }
     }
@@ -22,7 +22,7 @@ export async function unblockCardInformations(id: number, password: string) {
 
     if (decryptPassword.decryptInformationCard !== password) {
         throw {
-            type: "doesn't exist",
+            type: "unauthorized",
             message: "incorrect password!"
         }
     }

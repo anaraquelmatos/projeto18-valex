@@ -6,7 +6,7 @@ export async function validateIdCard(id: number) {
 
     if (!card) {
         throw {
-            type: "doesn't exist",
+            type: "unauthorized",
             message: "card id doesn't exist!"
         }
     }
