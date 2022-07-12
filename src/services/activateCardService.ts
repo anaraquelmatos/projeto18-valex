@@ -36,7 +36,7 @@ async function validateInfosCardActivate(id: number, cvc: string, password: stri
 
     if (error) {
         throw {
-            type: "unprocessable entity",
+            type: "unauthorized",
             message: "the password don't have four numbers!"
         }
     }
