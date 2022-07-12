@@ -4,55 +4,52 @@ import { encryptInfo } from "./createCardService.js";
 import Cryptr from "cryptr";
 import dotenv from "dotenv";
 import dayjs from "dayjs";
+import { validateIdCard } from "../utils/validateIdCard.js";
+import { encryptInformation } from "../utils/encryptInfo.js";
 
 dotenv.config();
 
 const DATE_TODAY = dayjs().format('MM/YY');
 
-async function decryptSecurityCode(securityCode: string) {
-    const securityCodeCard = new Cryptr(process.env.KEY);
-    const securityCodeEncrypted = securityCodeCard.decrypt(securityCode);
-    return securityCodeEncrypted;
+async function decryptSecurityCode(info: string) {
+    const informationCard = new Cryptr(process.env.KEY);
+    const decryptInformationCard = informationCard.decrypt(info);
+    return {
+        decryptInformationCard
+    };
 }
 
 export async function infosCardActivated(id: number, cvc: string, password: string) {
 
     await validateInfosCardActivate(id, cvc, password);
 
-    const passwordEncrypted = await encryptInfo(password);
+    const passwordEncrypted = await encryptInformation(password);
 
-    await updateCard(passwordEncrypted, id);
+    await updateCard(passwordEncrypted.infoCardEncrypted, id);
 
 }
 
 async function validateInfosCardActivate(id: number, cvc: string, password: string) {
 
-    const validateId = await cardRepository.findById(id);
+    const validateId = await validateIdCard(id);
 
-    const decryptedSecurityCode = await decryptSecurityCode(validateId.securityCode);
+    const decryptedSecurityCode = await decryptSecurityCode(validateId.card.securityCode);
 
-    if (!validateId) {
-        throw {
-            type: "doesn't exist",
-            message: "user id doesn't exist!"
-        }
-    }
-
-    if (validateId.expirationDate < DATE_TODAY) {
+    if (validateId.card.expirationDate < DATE_TODAY) {
         throw {
             type: "doesn't exist",
             message: "expired expiration date!"
         }
     }
 
-    if (decryptedSecurityCode !== cvc) {
+    if (decryptedSecurityCode.decryptInformationCard !== cvc) {
         throw {
             type: "doesn't exist",
             message: "incorrect security code!"
         }
     }
 
-    if (validateId.password) {
+    if (validateId.card.password) {
         throw {
             type: "conflict",
             message: "the user already has a registered password!"

@@ -4,17 +4,15 @@ import * as cardRepository from "../repositories/cardRepository.js";
 
 import dotenv from "dotenv";
 import { faker } from "@faker-js/faker";
-import Cryptr from "cryptr";
 import dayjs from "dayjs";
+import { encryptInformation } from "../utils/encryptInfo.js";
 
 dotenv.config();
 
 const EXPIRATION_TIME = 5;
 
 export async function encryptInfo(securityCode: string) {
-    const securityCodeCard = new Cryptr(process.env.KEY);
-    const securityCodeEncrypted = securityCodeCard.encrypt(securityCode);
-    return securityCodeEncrypted;
+   
 }
 
 export async function infosCardCreated(id: number, type: cardRepository.TransactionTypes, key: string) {
@@ -25,11 +23,11 @@ export async function infosCardCreated(id: number, type: cardRepository.Transact
 
     const securityCode = faker.finance.creditCardCVV();
 
-    const securityCodeEncrypted = await encryptInfo(securityCode);
+    const securityCodeEncrypted = await encryptInformation(securityCode);
 
     const expirationDate = dayjs().add(EXPIRATION_TIME, 'year').format('MM/YY');
 
-    await insertCardRepos(id, type, fullName.name, numberCard, securityCodeEncrypted, expirationDate)
+    await insertCardRepos(id, type, fullName.name, numberCard, securityCodeEncrypted.infoCardEncrypted, expirationDate)
 
 }
 
@@ -70,7 +68,7 @@ async function validateCardRepos(id: number, type: cardRepository.TransactionTyp
 
     return {
         name
-    }
+    };
 
 }
 
