@@ -1,7 +1,9 @@
 import joi from "joi";
 
 export const createCardSchema = joi.object({
-    type: joi.string().pattern( /^groceries$|^restaurant$|^transport$|^education$|^health$/ ).required()
+    key: joi.string().required(),
+    type: joi.string().pattern( /^groceries$|^restaurant$|^transport$|^education$|^health$/ ).required(),
+    employeeId: joi.number().integer().required()
 });
 
 export const activateCardSchema = joi.object({

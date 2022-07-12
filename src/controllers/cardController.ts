@@ -16,7 +16,7 @@ export async function createCard(req: Request, res: Response) {
 
     const key = authorization?.replace("Bearer", "").trim();
 
-    const { error } = createCardSchema.validate({ type }, { abortEarly: false });
+    const { error } = createCardSchema.validate({ employeeId, key, type }, { abortEarly: false });
 
     if (error) {
         return res.status(422).send(error.details.map(detail => detail.message));
