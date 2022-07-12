@@ -11,7 +11,7 @@ dotenv.config();
 
 const EXPIRATION_TIME = 5;
 
-async function encryptSecurityCode(securityCode: string) {
+export async function encryptInfo(securityCode: string) {
     const securityCodeCard = new Cryptr(process.env.KEY);
     const securityCodeEncrypted = securityCodeCard.encrypt(securityCode);
     return securityCodeEncrypted;
@@ -25,7 +25,7 @@ export async function infosCardCreated(id: number, type: cardRepository.Transact
 
     const securityCode = faker.finance.creditCardCVV();
 
-    const securityCodeEncrypted = await encryptSecurityCode(securityCode);
+    const securityCodeEncrypted = await encryptInfo(securityCode);
 
     const expirationDate = dayjs().add(EXPIRATION_TIME, 'year').format('MM/YY');
 
@@ -33,7 +33,7 @@ export async function infosCardCreated(id: number, type: cardRepository.Transact
 
 }
 
-export async function validateCardRepos(id: number, type: cardRepository.TransactionTypes, key: string) {
+async function validateCardRepos(id: number, type: cardRepository.TransactionTypes, key: string) {
 
     const validateId = await employeeRepository.findById(id);
     const validateType = await cardRepository.findByTypeAndEmployeeId(type, id);
@@ -74,14 +74,14 @@ export async function validateCardRepos(id: number, type: cardRepository.Transac
 
 }
 
-export async function insertCardRepos(id: number, type: cardRepository.TransactionTypes, fullName: string, numberCard: string, cvcEncrypted: string,
-    expirationDate: string) {
+async function insertCardRepos(id: number, type: cardRepository.TransactionTypes, fullName: string, 
+    numberCard: string, securityCodeEncrypted: string, expirationDate: string) {
 
     const infosCardUser = {
         employeeId: id,
         number: numberCard,
         cardholderName: fullName,
-        securityCode: cvcEncrypted,
+        securityCode: securityCodeEncrypted,
         expirationDate,
         password: null,
         isVirtual: false,
