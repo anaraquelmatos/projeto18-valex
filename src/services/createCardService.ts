@@ -5,7 +5,7 @@ import * as cardRepository from "../repositories/cardRepository.js";
 import dotenv from "dotenv";
 import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
-import { encryptInformation } from "../utils/encryptInfo.js";
+import { encryptInformation } from "../utils/encryptInfoUtils.js";
 
 dotenv.config();
 

@@ -3,18 +3,18 @@ import { expirationCard } from "../utils/validateExpirationCardUtils.js";
 import { validateIdCard } from "../utils/validateIdCardUtils.js";
 import { cardBlockedOrUnblocked } from "../utils/cardBlockedOrUnblockedUtils.js";
 
-export async function blockCardInformations(id: number, password: string) {
+export async function unblockCardInformations(id: number, password: string) {
 
     const cardInfo = await validateIdCard(id);
 
-    const IS_BLOCKED = true;
+    const IS_BLOCKED = false;
 
     await expirationCard(cardInfo.card.expirationDate);
 
-    if (cardInfo.card.isBlocked === true) {
+    if (cardInfo.card.isBlocked === false) {
         throw {
             type: "doesn't exist",
-            message: "card is already blocked!"
+            message: "card is already unblocked!"
         }
     }
 
@@ -28,6 +28,4 @@ export async function blockCardInformations(id: number, password: string) {
     }
 
     await cardBlockedOrUnblocked(id, IS_BLOCKED);
-
 }
-

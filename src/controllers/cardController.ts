@@ -6,6 +6,7 @@ import { createCardSchema } from "../schemas/card.js";
 import * as createCardService from "../services/createCardService.js";
 import { balanceAndTransactionsCard } from "../services/balanceAndTransactionsService.js";
 import {blockCardInformations} from "../services/blockCardService.js";
+import { unblockCardInformations } from "../services/unblockCardService.js";
 
 
 export async function createCard(req: Request, res: Response) {
@@ -58,6 +59,16 @@ export async function blockCard(req: Request, res: Response) {
 
     await blockCardInformations(id, password);
 
-    res.sendStatus(201);
+    res.sendStatus(200);
+
+}
+
+export async function unblockCard(req: Request, res: Response) {
+
+    const { id, password }: { id: number, password: string } = req.body;
+
+    await unblockCardInformations(id, password);
+
+    res.sendStatus(200);
 
 }

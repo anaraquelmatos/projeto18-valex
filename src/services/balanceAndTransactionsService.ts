@@ -1,4 +1,4 @@
-import { validateIdCard } from "../utils/validateIdCard.js";
+import { validateIdCard } from "../utils/validateIdCardUtils.js";
 import * as rechargeRepository from "../repositories/rechargeRepository.js";
 import * as paymentRepository from "../repositories/paymentRepository.js";
 
