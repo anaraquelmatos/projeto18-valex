@@ -1,7 +1,7 @@
 ## Valex
 
-<p>API referente à concessão de benefício por parte do empregador</p>
-<p>Funcionalidades quanto ao cartão: criação, ativação, bloqueio, desbloqueio, recarga e compra</p>
+<p> - API referente à concessão de benefício por parte do empregador</p>
+<p> - Funcionalidades quanto ao cartão: criação, ativação, bloqueio, desbloqueio, recarga e compra</p>
 
 
 ## Usage
