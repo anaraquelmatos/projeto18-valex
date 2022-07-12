@@ -1,10 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 
 export default function errorHandler(error, req: Request, res: Response, next: NextFunction) {
-    console.log(error);
+
+    if (error.type === "doesn't exist") {
+        return res.status(404).send({ message: error.message });
+    }
+    if (error.type === "conflict") {
+        return res.status(409).send({ message: error.message });
+    }
     if (error.response) {
         return res.sendStatus(error.response.status);
     }
+
+    console.log(error);
 
     res.sendStatus(500);
 }
