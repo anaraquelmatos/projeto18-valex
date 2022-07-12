@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 export default function errorHandler(error, req: Request, res: Response, next: NextFunction) {
 
     if (error.type === "doesn't exist") {
-        return res.status(404).send({ message: error.message });
+        return res.status(401).send({ message: error.message });
     }
     if (error.type === "conflict") {
         return res.status(409).send({ message: error.message });

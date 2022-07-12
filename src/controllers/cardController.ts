@@ -4,7 +4,9 @@ import * as activateCardService from "../services/activateCardService.js";
 import { TransactionTypes } from "../repositories/cardRepository.js";
 import { createCardSchema } from "../schemas/card.js";
 import * as createCardService from "../services/createCardService.js";
-import { balanceAndTransactionsCard } from "../services/balanceAndTransactions.js";
+import { balanceAndTransactionsCard } from "../services/balanceAndTransactionsService.js";
+import {blockCardInformations} from "../services/blockCardService.js";
+
 
 export async function createCard(req: Request, res: Response) {
 
@@ -40,12 +42,22 @@ export async function activateCard(req: Request, res: Response) {
     res.sendStatus(201);
 }
 
-export async function balanceAndTransactions(req: Request<{id: number}>, res: Response) {
+export async function balanceAndTransactions(req: Request<{ id: number }>, res: Response) {
 
-    const {id} = req.params;
+    const { id } = req.params;
 
     const informationsCard = await balanceAndTransactionsCard(id);
 
     res.send(informationsCard).status(200);
+
+}
+
+export async function blockCard(req: Request, res: Response) {
+
+    const { id, password }: { id: number, password: string } = req.body;
+
+    await blockCardInformations(id, password);
+
+    res.sendStatus(201);
 
 }

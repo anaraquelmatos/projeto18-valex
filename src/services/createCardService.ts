@@ -37,18 +37,20 @@ async function validateCardRepos(id: number, type: cardRepository.TransactionTyp
     const validateType = await cardRepository.findByTypeAndEmployeeId(type, id);
     const validateKey = await companyRepository.findByApiKey(key);
 
+    if (!validateKey) {
+        throw {
+            type: "doesn't exist company",
+            message: "apiKey doesn't exist!"
+        }
+    }
+
     if (!validateId) {
         throw {
             type: "doesn't exist",
             message: "user id doesn't exist!"
         }
     }
-    if (!validateKey) {
-        throw {
-            type: "doesn't exist",
-            message: "apiKey doesn't exist!"
-        }
-    }
+
     if (validateType) {
         throw {
             type: "conflict",
