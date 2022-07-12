@@ -16,7 +16,7 @@ $ npm install
 $ npm run dev
 ```
 
-API:
+## API
 
 ```
 - POST /card-user
